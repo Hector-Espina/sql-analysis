@@ -59,11 +59,11 @@ erDiagram
         NUMERIC refund_amount_usd
     }
 
-    WEBSITE_SESSIONS ||--o{ WEBSITE_PAGEVIEWS : genera
-    WEBSITE_SESSIONS ||--o{ ORDERS : genera
-    PRODUCTS ||--o{ ORDERS : producto_principal
-    ORDERS ||--|{ ORDER_ITEMS : contiene
-    PRODUCTS ||--o{ ORDER_ITEMS : corresponde
-    ORDER_ITEMS ||--o{ ORDER_ITEM_REFUNDS : puede_generar
-    ORDERS ||--o{ ORDER_ITEM_REFUNDS : asociado
+    WEBSITE_SESSIONS ||--o{ WEBSITE_PAGEVIEWS : website_session_id
+    WEBSITE_SESSIONS ||--o{ ORDERS : website_session_id
+    PRODUCTS ||--o{ ORDERS : primary_product_id
+    ORDERS ||--|{ ORDER_ITEMS : order_id
+    PRODUCTS ||--o{ ORDER_ITEMS : product_id
+    ORDER_ITEMS ||--o{ ORDER_ITEM_REFUNDS : order_item_id
+    ORDERS ||--o{ ORDER_ITEM_REFUNDS : order_id
 ```
