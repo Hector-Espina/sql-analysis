@@ -40,7 +40,7 @@ El dataset contiene información sobre:
 
 La base de datos utilizada en el proyecto contiene **1.735.068 registros** distribuidos entre las seis tablas analizadas.
 
-Los archivos CSV originales no se incluyen en el repositorio debido a su tamaño. Pueden descargarse directamente desde la fuente indicada anteriormente.
+Los archivos CSV originales no se incluyen en el repositorio. Pueden descargarse directamente desde la fuente indicada anteriormente.
 
 ---
 
