@@ -27,6 +27,8 @@ El análisis busca responder preguntas como:
 
 El proyecto utiliza el dataset **Toy Store E-Commerce Database / Maven Fuzzy Factory**, disponible públicamente en Maven Analytics.
 
+**Fuente:** https://mavenanalytics.io/data-playground/toy-store-e-commerce-database
+
 El dataset contiene información sobre:
 
 - sesiones web;
@@ -38,7 +40,7 @@ El dataset contiene información sobre:
 
 La base de datos utilizada en el proyecto contiene **1.735.068 registros** distribuidos entre las seis tablas analizadas.
 
-Los archivos CSV originales no se incluyen en el repositorio.
+Los archivos CSV originales no se incluyen en el repositorio debido a su tamaño. Pueden descargarse directamente desde la fuente indicada anteriormente.
 
 ---
 
@@ -64,21 +66,9 @@ La base de datos está formada por seis tablas principales:
 - `order_item_refunds`
 - `products`
 
-Las principales relaciones son:
+El modelo relacional completo, incluyendo claves primarias, claves foráneas y relaciones entre las tablas, está documentado en:
 
-website_sessions
-    │
-    ├──── website_pageviews
-    │
-    └──── orders
-              │
-              └──── order_items
-                        │
-                        ├──── products
-                        │
-                        └──── order_item_refunds
-
-Además, `orders.primary_product_id` permite identificar el producto principal asociado a cada pedido.
+**[Ver modelo de datos](docs/database_schema.md)**
 
 ---
 
@@ -106,6 +96,89 @@ sql-analysis/
 ├── .gitignore
 └── README.md
 ```
+
+---
+
+## Cómo reproducir el proyecto
+
+### 1. Descargar el dataset
+
+Descargar **Toy Store E-Commerce Database / Maven Fuzzy Factory** desde Maven Analytics:
+
+https://mavenanalytics.io/data-playground/toy-store-e-commerce-database
+
+Guardar los archivos CSV en:
+
+```text
+data/raw/
+```
+
+Los CSV están excluidos del control de versiones mediante `.gitignore`.
+
+### 2. Crear la base de datos
+
+Crear una base de datos PostgreSQL para el proyecto y conectarse a ella mediante `psql`.
+
+### 3. Crear las tablas
+
+Ejecutar:
+
+```bash
+psql -d sql_analysis -f sql/01_database_setup.sql
+```
+
+Este script crea las seis tablas y sus relaciones mediante claves primarias y foráneas.
+
+### 4. Importar los datos
+
+Desde `psql`, importar cada CSV mediante `\copy`.
+
+Ejemplo:
+
+```sql
+\copy products FROM 'data/raw/products.csv' DELIMITER ',' CSV HEADER;
+```
+
+El mismo procedimiento debe aplicarse al resto de tablas respetando las dependencias entre claves foráneas.
+
+### 5. Validar los datos
+
+Ejecutar:
+
+```bash
+psql -d sql_analysis -f sql/02_data_validation.sql
+```
+
+Este script comprueba duplicados, valores nulos, rangos temporales, integridad referencial y reglas básicas de negocio.
+
+### 6. Limpiar los datos
+
+Ejecutar:
+
+```bash
+psql -d sql_analysis -f sql/03_data_cleaning.sql
+```
+
+El proceso normaliza los valores ausentes almacenados originalmente como la cadena de texto `'NULL'`.
+
+### 7. Ejecutar los análisis
+
+Análisis exploratorio:
+
+```bash
+psql -d sql_analysis -f sql/04_exploratory_analysis.sql
+```
+
+Análisis avanzado:
+
+```bash
+psql -d sql_analysis -f sql/05_advanced_analysis.sql
+```
+
+Los principales resultados e interpretaciones están documentados en:
+
+**[Principales insights de negocio](results/key_insights.md)**
+
 
 ---
 
